@@ -93,3 +93,26 @@ def abs_report(request):
 		'full': full_abs_students.count()
 	}
 	return render(request, 'core/absent_students_report.html', context)
+
+def raw_report(request):
+	students = Student.objects.exclude(incomplete_code='1')
+	passed_students_count = 0
+	passing_studnets_percentage = 0
+	for s in students:
+		print('th1', s.is_passed_in_th1())
+		print('th2', s.is_passed_in_th2())
+		print('th3', s.is_passed_in_th3())
+		print('th4', s.is_passed_in_th4())
+		print('th5', s.is_passed_in_th5())
+		print('th6', s.is_passed_in_th6())
+		print('th7', s.is_passed_in_th7())
+
+	# 	if (s.sub1 and s.is_passed_in_th1()) and (s.sub2 and s.is_passed_in_th2()) and (s.sub3 and s.is_passed_in_th3()) and (s.sub4 and s.is_passed_in_th4()) and (s.sub5 and s.is_passed_in_th5()) and (s.sub6 and s.is_passed_in_th6()) and (s.sub7 and s.is_passed_in_th7()):
+	# 		passed_students_count += 1
+
+	# total_students_count = students.count()
+
+	# passing_studnets_percentage = (passed_students_count / total_students_count) * 100
+	# print(passing_studnets_percentage)
+
+	return HttpResponse(f'passing studnets percentage, {passing_studnets_percentage}')
