@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<th>Roll Number</th>
+			<th>Student Name</th>
+			<th>Subject One</th>
+			<th>Theory One</th>
+			<th>Subject Two</th>
+			<th>Theory Two</th>
+			<th>Subject Three</th>
+			<th>Theory Three</th>
+			<th>Subject Four</th>
+			<th>Theory Four</th>
+			<th>Subject Five</th>
+			<th>Theory Five</th>
+			<th>Subject Six</th>
+			<th>Theory Six</th>
+			<th>Subject Seven</th>
+			<th>Theory Seven</th>
+		</thead>
+		<tbody>
+			{% for s in inc_students %}
+			<tr>
+				<td>{{ s.roll_no }}</td>
+				<td>{{ s.name }}</td>
+				<td>{{ s.sub1 }}</td>
+				<td>{{ s.th1|default_if_none:"___" }}</td>
+				<td>{{ s.sub2 }}</td>
+				<td>{{ s.th2|default_if_none:"___" }}</td>
+				<td>{{ s.sub3 }}</td>
+				<td>{{ s.th3|default_if_none:"___" }}</td>
+				<td>{{ s.sub4 }}</td>
+				<td>{{ s.th4|default_if_none:"___" }}</td>
+				<td>{{ s.sub5 }}</td>
+				<td>{{ s.th5|default_if_none:"___" }}</td>
+				<td>{{ s.sub6 }}</td>
+				<td>{{ s.th6|default_if_none:"___" }}</td>
+				<td>{{ s.sub7 }}</td>
+				<td>{{ s.th7 }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<a href="#">Download Report(txt)</a>
+</body>
+</html>
