@@ -177,44 +177,88 @@ class Student(models.Model):
 	exception_code = models.CharField(max_length=1, null=True)
 	absent_code = models.CharField(max_length=1, null=True)
 	incomplete_code = models.CharField(max_length=1, null=True)
+	raw_passed = models.BooleanField(default=False)
 
 	def is_passed_in_th1(self):
-		if self.th1 and self.th1 >=  PASSING_THEORY_MARKS[self.sub1]:
+		if self.th1 and self.th1 != 'AB' and int(self.th1) >=  int(PASSING_THEORY_MARKS[self.sub1]):
 			return True
 		else:
 			return False
 
 	def is_passed_in_th2(self):
-		if self.th2 and self.th2 >=  PASSING_THEORY_MARKS[self.sub2]:
+		if self.th2 and self.th2 != 'AB' and int(self.th2) >=  int(PASSING_THEORY_MARKS[self.sub2]):
 			return True
 		else:
 			return False
 
 	def is_passed_in_th3(self):
-		if self.th3 and self.th3 >=  PASSING_THEORY_MARKS[self.sub3]:
+		if self.th3 and self.th3 != 'AB' and int(self.th3) >=  int(PASSING_THEORY_MARKS[self.sub3]):
 			return True
 		else:
 			return False
 
 	def is_passed_in_th4(self):
-		if self.th4 and self.th4 >=  PASSING_THEORY_MARKS[self.sub4]:
+		if self.th4 and self.th4 != 'AB' and int(self.th4) >=  int(PASSING_THEORY_MARKS[self.sub4]):
 			return True
 		else:
 			return False
 
 	def is_passed_in_th5(self):
-		if self.th5 and self.th5 >=  PASSING_THEORY_MARKS[self.sub5]:
+		if self.th5 and self.th5 != 'AB' and int(self.th5) >=  int(PASSING_THEORY_MARKS[self.sub5]):
 			return True
 		return False
 
 	def is_passed_in_th6(self):
-		if self.th6 and self.th6 >=  PASSING_THEORY_MARKS[self.sub6]:
+		if self.th6 and self.th6 != 'AB' and int(self.th6) >=  int(PASSING_THEORY_MARKS[self.sub6]):
 			return True
 		else:
 			return False
 
 	def is_passed_in_th7(self):
-		if self.th7 and self.th7 >=  PASSING_THEORY_MARKS[self.sub7]:
+		if self.th7 and self.th7 != 'AB' and int(self.th7) >=  int(PASSING_THEORY_MARKS[self.sub7]):
+			return True
+		else:
+			return False
+
+	#theory end prac start
+
+	def is_passed_in_pr1(self):
+		if self.pr1 and int(self.pr1) >=  int(PASSING_PRACT_MARKS[self.sub1]):
+			return True
+		else:
+			return False
+
+	def is_passed_in_pr2(self):
+		if self.pr2 and int(self.pr2) >=  int(PASSING_PRACT_MARKS[self.sub2]):
+			return True
+		else:
+			return False
+
+	def is_passed_in_pr3(self):
+		if self.pr3 and int(self.pr3) >=  int(PASSING_PRACT_MARKS[self.sub3]):
+			return True
+		else:
+			return False
+
+	def is_passed_in_pr4(self):
+		if self.pr4 and int(self.pr4) >=  int(PASSING_PRACT_MARKS[self.sub4]):
+			return True
+		else:
+			return False
+
+	def is_passed_in_pr5(self):
+		if self.pr5 and int(self.pr5) >=  int(PASSING_PRACT_MARKS[self.sub5]):
+			return True
+		return False
+
+	def is_passed_in_pr6(self):
+		if self.pr6 and int(self.pr6) >=  int(PASSING_PRACT_MARKS[self.sub6]):
+			return True
+		else:
+			return False
+
+	def is_passed_in_pr7(self):
+		if self.pr7 and int(self.pr7) >=  int(PASSING_PRACT_MARKS[self.sub7]):
 			return True
 		else:
 			return False

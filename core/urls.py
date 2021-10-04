@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, chk_inc, inc_report, chk_absentees, abs_report, raw_report
+from .views import index, chk_inc, inc_report, chk_absentees, abs_report, raw_report, subject_relative_report
 
 app_name = 'core'
 
@@ -10,4 +10,5 @@ urlpatterns = [
 	path('check-absent-students/', chk_absentees, name='chk_absentees'),
 	path('absent-students-report/', abs_report, name='abs_report'),
 	path('raw-report/', raw_report, name='raw_report'),
+	path('relative-subject-list/', subject_relative_report, name='subject_relative_report'),
 ]

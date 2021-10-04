@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<p>Subject Code - Appeared Students - Passed Students - Pass Percentage in Each Subject</p>
+	{% for k,v in subj_dict.items %}
+	{% for k1, v1 in subj_passed_dict.items %}
+	{% if k == k1 %}
+	<p>{{ k }} - {{ v }} - {{ v1 }} - {% widthratio v1 v 100 %}%</p>
+	{% endif %}
+	{% endfor %}
+	{% endfor %}
+</body>
+</html>

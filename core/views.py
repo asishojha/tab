@@ -95,24 +95,85 @@ def abs_report(request):
 	return render(request, 'core/absent_students_report.html', context)
 
 def raw_report(request):
-	students = Student.objects.exclude(incomplete_code='1')
+	total_students = Student.objects.all()
+	students = Student.objects.exclude(incomplete_code='1').exclude(absent_code='4').exclude(absent_code='5')
 	passed_students_count = 0
 	passing_studnets_percentage = 0
 	for s in students:
-		print('th1', s.is_passed_in_th1())
-		print('th2', s.is_passed_in_th2())
-		print('th3', s.is_passed_in_th3())
-		print('th4', s.is_passed_in_th4())
-		print('th5', s.is_passed_in_th5())
-		print('th6', s.is_passed_in_th6())
-		print('th7', s.is_passed_in_th7())
+		if s.sub1:
+			if ((s.sub1 and s.is_passed_in_th1()) and (s.sub2 and s.is_passed_in_th2()) and (s.sub3 and s.is_passed_in_th3()) and (s.sub4 and s.is_passed_in_th4()) and (s.sub5 and s.is_passed_in_th5())) and ((s.sub1 and s.is_passed_in_pr1()) and (s.sub2 and s.is_passed_in_pr2()) and (s.sub3 and s.is_passed_in_pr3()) and (s.sub4 and s.is_passed_in_pr4()) and (s.sub5 and s.is_passed_in_pr5())):
+				s.raw_passed = True
+				s.save()
+				passed_students_count += 1
+		else:
+			if ((s.sub2 and s.is_passed_in_th2()) and (s.sub3 and s.is_passed_in_th3()) and (s.sub4 and s.is_passed_in_th4()) and (s.sub5 and s.is_passed_in_th5()) and (s.sub6 and s.is_passed_in_th6())) and ((s.sub2 and s.is_passed_in_pr2()) and (s.sub3 and s.is_passed_in_pr3()) and (s.sub4 and s.is_passed_in_pr4()) and (s.sub5 and s.is_passed_in_pr5()) and (s.sub6 and s.is_passed_in_pr6())):
+				s.raw_passed = True
+				s.save()
+				passed_students_count += 1
 
-	# 	if (s.sub1 and s.is_passed_in_th1()) and (s.sub2 and s.is_passed_in_th2()) and (s.sub3 and s.is_passed_in_th3()) and (s.sub4 and s.is_passed_in_th4()) and (s.sub5 and s.is_passed_in_th5()) and (s.sub6 and s.is_passed_in_th6()) and (s.sub7 and s.is_passed_in_th7()):
-	# 		passed_students_count += 1
 
-	# total_students_count = students.count()
+	total_students_count = total_students.count()
 
-	# passing_studnets_percentage = (passed_students_count / total_students_count) * 100
-	# print(passing_studnets_percentage)
+	passing_studnets_percentage = (passed_students_count / total_students_count) * 100 # round off required
+	print(passing_studnets_percentage)
 
-	return HttpResponse(f'passing studnets percentage, {passing_studnets_percentage}')
+	return HttpResponse('Total Students: {}<br>Passed Students: {}<br>Pass Percentage: {}%'.format(total_students_count, passed_students_count, passing_studnets_percentage))
+
+
+def subject_relative_report(request):
+	subject_list = []
+	students = Student.objects.all()
+	for s in students:
+		subject_list.append(s.sub1)
+		subject_list.append(s.sub2)
+		subject_list.append(s.sub3)
+		subject_list.append(s.sub4)
+		subject_list.append(s.sub5)
+		subject_list.append(s.sub6)
+		subject_list.append(s.sub7)
+
+	subject_list = list(set(subject_list))
+	subject_list = [i for i in subject_list if i]
+
+	subj_dict = {}
+
+	subj_passed_dict = {}
+
+	for i in subject_list:
+		subj_dict[i] = 0
+
+
+	for sub_code in subject_list:
+		for s in students:
+			if s.sub1 == sub_code or s.sub2 == sub_code or s.sub3 == sub_code or s.sub4 == sub_code or s.sub5 == sub_code or s.sub6 == sub_code or s.sub7 == sub_code:
+				subj_dict[sub_code] += 1
+
+	for k,v in subj_dict.items():
+		subj_dict[k] = str(v)			
+
+	for i in subject_list:
+		subj_passed_dict[i] = 0
+
+	for sub_code in subject_list:
+		for s in students:
+			if (s.sub1 == sub_code and s.is_passed_in_th1()):
+				subj_passed_dict[sub_code] += 1
+			elif s.sub2 == sub_code and s.is_passed_in_th2():
+				subj_passed_dict[sub_code] += 1
+			elif s.sub3 == sub_code and s.is_passed_in_th3():
+				subj_passed_dict[sub_code] += 1
+			elif s.sub4 == sub_code and s.is_passed_in_th4():
+				subj_passed_dict[sub_code] += 1
+			elif s.sub5 == sub_code and s.is_passed_in_th5():
+				subj_passed_dict[sub_code] += 1
+			elif s.sub6 == sub_code and s.is_passed_in_th6():
+				subj_passed_dict[sub_code] += 1
+			elif s.sub7 == sub_code and s.is_passed_in_th7():
+				subj_passed_dict[sub_code] += 1
+
+	context = {
+		'subj_dict': subj_dict,
+		'subj_passed_dict': subj_passed_dict,
+	}
+
+	return render(request, 'subject-relative-report.html', context)
