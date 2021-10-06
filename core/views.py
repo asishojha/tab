@@ -188,3 +188,22 @@ def create_calculated_values(request):
 		calc_student.apply_ovgr_grade()
 
 	return HttpResponse('Calc Students')
+
+def apply_absents(request):
+	students = Student.objects.all()
+	for s in students:
+		s.is_absent_in_theory()
+		s.is_absent_in_practical()
+
+	return HttpResponse('Absents Applied')
+
+def apply_awards(request):
+	students = Student.objects.filter(raw_passed=False, th_ab=False, pr_ab=False)
+	for s in students:
+		calc_student, created = CalculatedStudent.objects.get_or_create(student=s)
+		calc_student.apply_award()
+		calc_student.apply_grades_base()
+		calc_student.aggregate_base()
+		calc_student.apply_ovgr_grade()
+
+	return HttpResponse('Awards Applied')

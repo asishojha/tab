@@ -209,6 +209,8 @@ class Student(models.Model):
 	absent_code = models.CharField(max_length=1, null=True)
 	incomplete_code = models.CharField(max_length=1, null=True)
 	raw_passed = models.BooleanField(default=False)
+	th_ab = models.BooleanField(default=False)
+	pr_ab = models.BooleanField(default=False)
 
 	def is_passed_in_th1(self):
 		if self.th1 and self.th1 != 'AB' and int(self.th1) >=  int(PASSING_THEORY_MARKS[self.sub1]):
@@ -294,6 +296,26 @@ class Student(models.Model):
 		else:
 			return False
 
+	def is_absent_in_theory(self):
+		if self.sub1:
+			if self.th1 == 'AB' or self.th2 == 'AB' or self.th3 == 'AB' or self.th4 == 'AB' or self.th5 == 'AB':
+				self.th_ab = True
+				self.save()
+		else:
+			if self.th2 == 'AB' or self.th3 == 'AB' or self.th4 == 'AB' or self.th5 == 'AB' or self.th6 == 'AB':
+				self.th_ab = True
+				self.save()
+
+	def is_absent_in_practical(self):
+		if self.sub1:
+			if self.pr1 == 'AB' or self.pr2 == 'AB' or self.pr3 == 'AB' or self.pr4 == 'AB' or self.pr5 == 'AB':
+				self.pr_ab = True
+				self.save()
+		else:
+			if self.pr2 == 'AB' or self.pr3 == 'AB' or self.pr4 == 'AB' or self.pr5 == 'AB' or self.pr6 == 'AB':
+				self.pr_ab = True
+				self.save()
+
 	def __str__(self):
 		return self.enr_no
 
@@ -332,50 +354,128 @@ class CalculatedStudent(models.Model):
 		return self.student.enr_no
 
 	def apply_total_base(self):
-		if self.student.raw_passed == True:
-			if self.student.sub1:
-				self.total1=str(int(self.student.th1)+int(self.student.pr1)).zfill(3)
-			if self.student.sub2:
-				self.total2=str(int(self.student.th2)+int(self.student.pr2)).zfill(3)	
-			if self.student.sub3:
-				self.total3=str(int(self.student.th3)+int(self.student.pr3)).zfill(3)	
-			if self.student.sub4:
-				self.total4=str(int(self.student.th4)+int(self.student.pr4)).zfill(3)	
-			if self.student.sub5:
-				self.total5=str(int(self.student.th5)+int(self.student.pr5)).zfill(3)	
-			if self.student.sub6:
-				self.total6=str(int(self.student.th6)+int(self.student.pr6)).zfill(3)	# may cause ab error, needs to be handled here!!!!!!
-			if self.student.sub7:
-				self.total7=str(int(self.student.th7)+int(self.student.pr7)).zfill(3)
-			self.save()
+		# if self.student.raw_passed == True:
+		if self.student.sub1:
+			self.total1=str(int(self.student.th1)+int(self.student.pr1)).zfill(3)
+		if self.student.sub2:
+			self.total2=str(int(self.student.th2)+int(self.student.pr2)).zfill(3)	
+		if self.student.sub3:
+			self.total3=str(int(self.student.th3)+int(self.student.pr3)).zfill(3)	
+		if self.student.sub4:
+			self.total4=str(int(self.student.th4)+int(self.student.pr4)).zfill(3)	
+		if self.student.sub5:
+			self.total5=str(int(self.student.th5)+int(self.student.pr5)).zfill(3)	
+		if self.student.sub6:
+			self.total6=str(int(self.student.th6)+int(self.student.pr6)).zfill(3)	# may cause ab error, needs to be handled here!!!!!!
+		if self.student.sub7:
+			self.total7=str(int(self.student.th7)+int(self.student.pr7)).zfill(3)
+		self.save()
 
 	def apply_grades_base(self):
-		if self.student.raw_passed == True:
-			if self.student.sub1:
-				self.grade1 = GRADE_DICT[int(self.total1)]
-			if self.student.sub2:
-				self.grade2 = GRADE_DICT[int(self.total2)]
-			if self.student.sub3:
-				self.grade3 = GRADE_DICT[int(self.total3)]
-			if self.student.sub4:
-				self.grade4 = GRADE_DICT[int(self.total4)]
-			if self.student.sub5:
-				self.grade5 = GRADE_DICT[int(self.total5)]
-			if self.student.sub6:
-				self.grade6 = GRADE_DICT[int(self.total6)]
-			if self.student.sub7:
-				self.grade7 = GRADE_DICT[int(self.total7)]
-			self.save()
+		# if self.student.raw_passed == True:
+		if self.student.sub1:
+			self.grade1 = GRADE_DICT[int(self.total1)]
+		if self.student.sub2:
+			self.grade2 = GRADE_DICT[int(self.total2)]
+		if self.student.sub3:
+			self.grade3 = GRADE_DICT[int(self.total3)]
+		if self.student.sub4:
+			self.grade4 = GRADE_DICT[int(self.total4)]
+		if self.student.sub5:
+			self.grade5 = GRADE_DICT[int(self.total5)]
+		if self.student.sub6:
+			self.grade6 = GRADE_DICT[int(self.total6)]
+		if self.student.sub7:
+			self.grade7 = GRADE_DICT[int(self.total7)]
+		self.save()
 
 	def aggregate_base(self):
-		if self.student.raw_passed == True:
-			if self.student.sub1:
-				self.aggr = int(self.total1) + int(self.total2) + int(self.total3) + int(self.total4) + int(self.total5)
-			else:
-				self.aggr = int(self.total2) + int(self.total3) + int(self.total4) + int(self.total5) + int(self.total6)
-			self.save()
+		# if self.student.raw_passed == True:
+		if self.student.sub1:
+			self.aggr = int(self.total1) + int(self.total2) + int(self.total3) + int(self.total4) + int(self.total5)
+		else:
+			self.aggr = int(self.total2) + int(self.total3) + int(self.total4) + int(self.total5) + int(self.total6)
+		self.save()
 
 	def apply_ovgr_grade(self):
-		if self.student.raw_passed == True:
-			self.overall_grade = OVGR_DICT[int(self.aggr)]
-			self.save()
+		# if self.student.raw_passed == True:
+		self.overall_grade = OVGR_DICT[int(self.aggr)]
+		self.save()
+
+	def apply_award(self):
+		tot_aw = 20
+		ind_aw = 8
+		aw_x = 0
+		# total_calc_aw = 0
+
+		if self.student.raw_passed == False or self.student.th_ab == True or self.student.pr_ab == True:
+			if self.student.sub1:
+				if self.student.th1 < PASSING_THEORY_MARKS[self.student.sub1]:
+					aw_x = int(PASSING_THEORY_MARKS[self.student.sub1]) - int(self.student.th1)
+					self.aw1 = str(aw_x).zfill(2)
+
+				if self.student.th2 < PASSING_THEORY_MARKS[self.student.sub2]:
+					aw_x = int(PASSING_THEORY_MARKS[self.student.sub2]) - int(self.student.th2)
+					self.aw2 = str(aw_x).zfill(2)
+
+				if self.student.th3 < PASSING_THEORY_MARKS[self.student.sub3]:
+					aw_x = int(PASSING_THEORY_MARKS[self.student.sub3]) - int(self.student.th3)
+					self.aw3 = str(aw_x).zfill(2)
+
+				if self.student.th4 < PASSING_THEORY_MARKS[self.student.sub4]:
+					aw_x = int(PASSING_THEORY_MARKS[self.student.sub4]) - int(self.student.th4)
+					self.aw4 = str(aw_x).zfill(2)
+
+				if self.student.th5 < PASSING_THEORY_MARKS[self.student.sub5]:
+					aw_x = int(PASSING_THEORY_MARKS[self.student.sub5]) - int(self.student.th5)
+					self.aw5 = str(aw_x).zfill(2)
+
+				total_calc_aw = int(self.aw1) + int(self.aw2) + int(self.aw3) + int(self.aw4) + int(self.aw5)
+				if not total_calc_aw > tot_aw:
+					self.total1 = str(int(self.student.th1) + int(self.student.pr1) + int(self.aw1)).zfill(3)
+					self.total2 = str(int(self.student.th2) + int(self.student.pr2) + int(self.aw2)).zfill(3)
+					self.total3 = str(int(self.student.th3) + int(self.student.pr3) + int(self.aw3)).zfill(3)
+					self.total4 = str(int(self.student.th4) + int(self.student.pr4) + int(self.aw4)).zfill(3)
+					self.total5 = str(int(self.student.th5) + int(self.student.pr5) + int(self.aw5)).zfill(3)
+				else:
+					self.total1 = str(int(self.student.th1) + int(self.student.pr1)).zfill(3)
+					self.total2 = str(int(self.student.th2) + int(self.student.pr2)).zfill(3)
+					self.total3 = str(int(self.student.th3) + int(self.student.pr3)).zfill(3)
+					self.total4 = str(int(self.student.th4) + int(self.student.pr4)).zfill(3)
+					self.total5 = str(int(self.student.th5) + int(self.student.pr5)).zfill(3)
+				self.save()
+
+			else:
+				if self.student.th2 < PASSING_THEORY_MARKS[self.student.sub2]:
+					aw_x = int(PASSING_THEORY_MARKS[self.student.sub2]) - int(self.student.th2)
+					self.aw2 = str(aw_x).zfill(2)
+
+				if self.student.th3 < PASSING_THEORY_MARKS[self.student.sub3]:
+					aw_x = int(PASSING_THEORY_MARKS[self.student.sub3]) - int(self.student.th3)
+					self.aw3 = str(aw_x).zfill(2)
+
+				if self.student.th4 < PASSING_THEORY_MARKS[self.student.sub4]:
+					aw_x = int(PASSING_THEORY_MARKS[self.student.sub4]) - int(self.student.th4)
+					self.aw4 = str(aw_x).zfill(2)
+
+				if self.student.th5 < PASSING_THEORY_MARKS[self.student.sub5]:
+					aw_x = int(PASSING_THEORY_MARKS[self.student.sub5]) - int(self.student.th5)
+					self.aw5 = str(aw_x).zfill(2)
+				if self.student.th6 < PASSING_THEORY_MARKS[self.student.sub6]:
+					aw_x = int(PASSING_THEORY_MARKS[self.student.sub6]) - int(self.student.th6)
+					self.aw6 = str(aw_x).zfill(2)
+				
+				total_calc_aw = int(self.aw2) + int(self.aw3) + int(self.aw4) + int(self.aw5) + int(self.aw6)
+				if not total_calc_aw > tot_aw:
+					self.total2 = str(int(self.student.th2) + int(self.student.pr2) + int(self.aw2)).zfill(3)
+					self.total3 = str(int(self.student.th3) + int(self.student.pr3) + int(self.aw3)).zfill(3)
+					self.total4 = str(int(self.student.th4) + int(self.student.pr4) + int(self.aw4)).zfill(3)
+					self.total5 = str(int(self.student.th5) + int(self.student.pr5) + int(self.aw5)).zfill(3)
+					self.total6 = str(int(self.student.th6) + int(self.student.pr6) + int(self.aw6)).zfill(3)
+				else:
+					self.total2 = str(int(self.student.th2) + int(self.student.pr2)).zfill(3)
+					self.total3 = str(int(self.student.th3) + int(self.student.pr3)).zfill(3)
+					self.total4 = str(int(self.student.th4) + int(self.student.pr4)).zfill(3)
+					self.total5 = str(int(self.student.th5) + int(self.student.pr5)).zfill(3)
+					self.total6 = str(int(self.student.th6) + int(self.student.pr6)).zfill(3)
+				self.save()
